@@ -1,1 +1,6 @@
-Start of repository
+Source code repository for x210ii/S5PV210
+
+Directory contents:
+
+	uboot		- Contains source code for u-boot
+
