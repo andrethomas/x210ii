@@ -144,7 +144,8 @@ ifeq ($(ARCH),arm)
 #CROSS_COMPILE = arm-linux-
 #CROSS_COMPILE = /usr/local/arm/4.4.1-eabi-cortex-a8/usr/bin/arm-linux-
 #CROSS_COMPILE = /usr/local/arm/4.2.2-eabi/usr/bin/arm-linux-
-CROSS_COMPILE = /usr/local/arm/arm-2009q3/bin/arm-none-linux-gnueabi-
+#CROSS_COMPILE = /usr/local/arm/arm-2009q3/bin/arm-none-linux-gnueabi-
+CROSS_COMPILE = /opt/toolchains/arm-2009q3/bin/arm-none-linux-gnueabi-
 endif
 ifeq ($(ARCH),i386)
 CROSS_COMPILE = i386-linux-
@@ -307,6 +308,7 @@ $(obj)u-boot.ldr.hex:	$(obj)u-boot.ldr
 
 $(obj)u-boot.ldr.srec:	$(obj)u-boot.ldr
 		$(OBJCOPY) ${OBJCFLAGS} -O srec $< $@ -I binary
+		./mkmovi
 
 $(obj)u-boot.img:	$(obj)u-boot.bin
 		./tools/mkimage -A $(ARCH) -T firmware -C none \
@@ -320,6 +322,7 @@ $(obj)u-boot.sha1:	$(obj)u-boot.bin
 
 $(obj)u-boot.dis:	$(obj)u-boot
 		$(OBJDUMP) -d $< > $@
+		./mkmovi
 
 $(obj)u-boot:		depend $(SUBDIRS) $(OBJS) $(LIBBOARD) $(LIBS) $(LDSCRIPT)
 		UNDEF_SYM=`$(OBJDUMP) -x $(LIBBOARD) $(LIBS) | \
@@ -3152,6 +3155,13 @@ clean:
 		\( -name 'core' -o -name '*.bak' -o -name '*~' \
 		-o -name '*.o'	-o -name '*.a'	\) -print \
 		| xargs rm -f
+	@rm -f u-boot
+	@rm -f u-boot.bin
+	@rm -f u-boot.dis
+	@rm -f u-boot.map
+	@rm -f u-boot.srec
+	@rm -f System.map
+	@rm -f u-boot-movi.bin
 
 clobber:	clean
 	@find $(OBJTREE) -type f \( -name .depend \
