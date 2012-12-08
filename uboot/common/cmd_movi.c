@@ -481,7 +481,11 @@ raw_area_t raw_area_control;
 
 int init_raw_area_table (block_dev_desc_t * dev_desc)
 {
+	#if defined(FORCE_MMC1)
+	struct mmc *host = find_mmc_device(1);
+	#else
 	struct mmc *host = find_mmc_device(dev_desc->dev);
+	#endif
 	
 	/* when last block does not have raw_area definition. */
 	if (raw_area_control.magic_number != MAGIC_NUMBER_MOVI) {
@@ -673,12 +677,20 @@ int do_movi(cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
 	if (boot_dev) {
 		/* boot device is NOR */
 		/* read kernel from eMMC */
+		#if defined (FORCE_MMC1)
+		mmc = find_mmc_device(1);
+		#else
 		mmc = find_mmc_device(0);
+		#endif
 		printf("MMC #0 is boot device\r\n");
 	} else {
 		/* boot device is SD card */
 		/* read kernel from SD card */
+		#if defined(FORCE_MMC1)
 		mmc = find_mmc_device(1);
+		#else
+		mmc = find_mmc_device(1);
+		#endif
 		printf("MMC #1 is boot device\r\n");
 	}
 #else

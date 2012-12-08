@@ -56,7 +56,11 @@ int do_fat_fsload (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 
 	dev = (int)simple_strtoul (argv[2], &ep, 16);
 
+        #if defined(FORCE_MMC1)
+	mmc = find_mmc_device(1);
+        #else
 	mmc = find_mmc_device(dev);
+        #endif
 	if (mmc_init(mmc)) {
 		printf("MMC init is failed.\n");
 		return 1;

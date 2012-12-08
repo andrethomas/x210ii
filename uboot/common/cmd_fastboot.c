@@ -1403,7 +1403,11 @@ static int set_partition_table()
 	pcount++;
 
 	/* System */
+        #if defined(FORCE_MMC1)
+	get_mmc_part_info("1", 2, &start, &count, &pid);
+        #else
 	get_mmc_part_info("0", 2, &start, &count, &pid);
+        #endif
 	if (pid != 0x83)
 		goto part_type_error;
 	strcpy(ptable[pcount].name, "system");
@@ -1413,7 +1417,11 @@ static int set_partition_table()
 	pcount++;
 
 	/* Data */
+        #if defined(FORCE_MMC1)
+	get_mmc_part_info("1", 3, &start, &count, &pid);
+        #else
 	get_mmc_part_info("0", 3, &start, &count, &pid);
+        #endif
 	if (pid != 0x83)
 		goto part_type_error;
 	strcpy(ptable[pcount].name, "userdata");
@@ -1423,7 +1431,11 @@ static int set_partition_table()
 	pcount++;
 
 	/* Cache */
+        #if defined(FORCE_MMC1)
+	get_mmc_part_info("1", 4, &start, &count, &pid);
+        #else
 	get_mmc_part_info("0", 4, &start, &count, &pid);
+        #endif
 	if (pid != 0x83)
 		goto part_type_error;
 	strcpy(ptable[pcount].name, "cache");
@@ -1433,7 +1445,11 @@ static int set_partition_table()
 	pcount++;
 
 	/* fat */
+        #if defined(FORCE_MMC1)
+	get_mmc_part_info("1", 1, &start, &count, &pid);
+        #else
 	get_mmc_part_info("0", 1, &start, &count, &pid);
+        #endif
 	if (pid != 0xc)
 		goto part_type_error;
 	strcpy(ptable[pcount].name, "fat");
@@ -1677,7 +1693,11 @@ int do_sdfuse (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 {
 	int ret = 1;
 	int enable_reset = 0;
+        #if defined(FORCE_MMC1)
+	struct mmc *mmc = find_mmc_device(1);
+        #else
 	struct mmc *mmc = find_mmc_device(CFG_FASTBOOT_SDFUSE_MMCDEV);
+        #endif
 
 	if (mmc_init(mmc)) {
 		printf("sdmmc init is failed.\n");

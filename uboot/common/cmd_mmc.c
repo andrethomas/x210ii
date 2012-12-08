@@ -79,7 +79,11 @@ int do_mmcinfo (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 	else
 		dev_num = simple_strtoul(argv[1], NULL, 0);
 
+	#if defined(FORCE_MMC1)
+	mmc = find_mmc_device(1);
+	#else
 	mmc = find_mmc_device(dev_num);
+	#endif
 
 	if (mmc) {
 		err = mmc_init(mmc);
@@ -104,7 +108,11 @@ int do_mmcops(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 	case 3:
 		if (strcmp(argv[1], "rescan") == 0) {
 			int dev = simple_strtoul(argv[2], NULL, 10);
+			#if defined(FORCE_MMC1)
+			struct mmc *mmc = find_mmc_device(1);
+			#else
 			struct mmc *mmc = find_mmc_device(dev);
+			#endif
 
 			if (!mmc)
 				return 1;
@@ -139,7 +147,11 @@ int do_mmcops(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 			u32 read_cnt;
 			u32 cnt_to_read;
 			void *addr_to_read;
+			#if defined(FORCE_MMC1)
+			struct mmc *mmc = find_mmc_device(1);
+			#else
 			struct mmc *mmc = find_mmc_device(dev);
+			#endif
 
 			if (!mmc)
 				return 1;
@@ -185,8 +197,11 @@ int do_mmcops(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 			u32 written_cnt;
 			u32 cnt_to_write;
 			void *addr_to_write = addr;
+			#if defined(FORCE_MMC1)
+			struct mmc *mmc = find_mmc_device(1);
+			#else
 			struct mmc *mmc = find_mmc_device(dev);
-
+			#endif
 
 			if (!mmc)
 				return 1;

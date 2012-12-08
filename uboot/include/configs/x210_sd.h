@@ -34,6 +34,12 @@
 //#define CONFIG_CHECK_X210CV3
 
 /*
+ * Force u-boot to use MMC1 in all cases - this change is made for S5PV210 boards to use external MMC (MMC1) - andre1024@gmail.com
+ */
+
+#define FORCE_MMC1		1
+
+/*
  * High Level Configuration Options
  * (easy to change)
  */

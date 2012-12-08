@@ -67,12 +67,19 @@ struct mmc *find_mmc_device(int dev_num)
 
 	list_for_each(entry, &mmc_devices) {
 		m = list_entry(entry, struct mmc, link);
-
+		#if defined(FORCE_MMC1)
+		if (m->block_dev.dev == 1)
+			return m;
+		#else
 		if (m->block_dev.dev == dev_num)
 			return m;
+		#endif
 	}
-
+	#if defined(FORCE_MMC1)
+	printf("MMC Device %d not found\n", 1);
+	#else
 	printf("MMC Device %d not found\n", dev_num);
+	#endif
 
 	return NULL;
 }
@@ -80,7 +87,11 @@ struct mmc *find_mmc_device(int dev_num)
 static ulong
 mmc_bread_primitive(int dev_num, ulong start, lbaint_t blkcnt, void *dst)
 {
+	#if defined(FORCE_MMC1)
+	struct mmc *host = find_mmc_device(1);
+	#else
 	struct mmc *host = find_mmc_device(dev_num);
+	#endif
 	int err;
 	struct mmc_cmd cmd;
 	struct mmc_data data;
@@ -129,13 +140,21 @@ mmc_bread(int dev_num, ulong start, lbaint_t blkcnt, void *dst)
 	ulong ret = 0;
 
 	while (blkcnt_tmp >= MAXBLKCNT) {
+		#if defined(FORCE_MMC1)
+		ret += mmc_bread_primitive(1, start, MAXBLKCNT, dst);
+		#else
 		ret += mmc_bread_primitive(dev_num, start, MAXBLKCNT, dst);
+		#endif
 
 		start += MAXBLKCNT;
 		dst += MAXBLKCNT * 512;
 		blkcnt_tmp -= MAXBLKCNT;
 	}
+	#if defined(FORCE_MMC1)
+	ret += mmc_bread_primitive(1, start, blkcnt_tmp, dst);
+	#else
 	ret += mmc_bread_primitive(dev_num, start, blkcnt_tmp, dst);
+	#endif
 
 	return ret;
 }
@@ -143,7 +162,11 @@ mmc_bread(int dev_num, ulong start, lbaint_t blkcnt, void *dst)
 static ulong
 mmc_bwrite(int dev_num, ulong start, lbaint_t blkcnt, const void *src)
 {
+	#if defined(FORCE_MMC1)
+	struct mmc *host = find_mmc_device(1);
+	#else
 	struct mmc *host = find_mmc_device(dev_num);
+	#endif
 	struct mmc_cmd cmd;
 	struct mmc_data data;
 	int err;
@@ -182,7 +205,11 @@ mmc_bwrite(int dev_num, ulong start, lbaint_t blkcnt, const void *src)
 	}
 
 #if defined(CONFIG_VOGUES)
+	#if defined(FORCE_MMC1)
+	mmc_bread(1, start, blkcnt, src);
+	#else
 	mmc_bread(dev_num, start, blkcnt, src);
+	#endif
 #endif
 	return blkcnt;
 }
@@ -1098,7 +1125,11 @@ int mmc_register(struct mmc *mmc)
 
 block_dev_desc_t *mmc_get_dev(int dev)
 {
+	#if defined (FORCE_MMC1)
+	struct mmc *mmc = find_mmc_device(1);
+	#else
 	struct mmc *mmc = find_mmc_device(dev);
+	#endif
 
 	return mmc ? &mmc->block_dev : NULL;
 }
@@ -1186,7 +1217,11 @@ int mmc_initialize(bd_t *bis)
 #ifdef CONFIG_CHECK_X210CV3
 	mmc = find_mmc_device(1);//lqm
 #else
+	#if defined(FORCE_MMC1)
+	mmc = find_mmc_device(1);
+	#else
 	mmc = find_mmc_device(0);
+	#endif
 #endif
 	if (mmc) {
 		err = mmc_init(mmc);

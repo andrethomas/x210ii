@@ -511,7 +511,11 @@ void start_armboot (void)
 #if defined(CONFIG_SMDK6410)
 	#if defined(CONFIG_GENERIC_MMC)
 	puts ("SD/MMC:  ");
+	#if defined(FORCE_MMC1)
+	mmc_exist = mmc_initialize(1);
+	#else
 	mmc_exist = mmc_initialize(gd->bd);
+	#endif
 	if (mmc_exist != 0)
 	{
 		puts ("0 MB\n");
@@ -552,7 +556,11 @@ void start_armboot (void)
 
 	#if defined(CONFIG_GENERIC_MMC)
 		puts ("SD/MMC:  ");
+		#if defined(FORCE_MMC1)
+		mmc_exist = mmc_initialize(1);
+		#else
 		mmc_exist = mmc_initialize(gd->bd);
+		#endif
 		if (mmc_exist != 0)
 		{
 			puts ("0 MB\n");
@@ -575,7 +583,11 @@ void start_armboot (void)
 
 	#if defined(CONFIG_GENERIC_MMC)
 		puts ("SD/MMC:  ");
+		#if defined(FORCE_MMC1)
+		mmc_exist = mmc_initialize(1);
+		#else
 		mmc_exist = mmc_initialize(gd->bd);
+		#endif
 		if (mmc_exist != 0)
 		{
 			puts ("0 MB\n");
@@ -609,7 +621,11 @@ void start_armboot (void)
 #if defined(CONFIG_SMDK6440)
 	#if defined(CONFIG_GENERIC_MMC)
 	puts ("SD/MMC:  ");
+	#if defined(FORCE_MMC1)
+	mmc_exist = mmc_initialize(1);
+	#else
 	mmc_exist = mmc_initialize(gd->bd);
+	#endif
 	if (mmc_exist != 0)
 	{
 		puts ("0 MB\n");
@@ -653,7 +669,11 @@ void start_armboot (void)
 #if defined(CONFIG_SMDK6430)
 	#if defined(CONFIG_GENERIC_MMC)
 	puts ("SD/MMC:  ");
+	#if defined(FORCE_MMC1)
+	mmc_exist = mmc_initialize(1);
+	#else
 	mmc_exist = mmc_initialize(gd->bd);
+	#endif
 	if (mmc_exist != 0)
 	{
 		puts ("0 MB\n");
@@ -694,7 +714,11 @@ void start_armboot (void)
 #if defined(CONFIG_SMDK6442)
 	#if defined(CONFIG_GENERIC_MMC)
 	puts ("SD/MMC:  ");
+	#if defined(FORCE_MMC1)
+	mmc_exist = mmc_initialize(1);
+	#else
 	mmc_exist = mmc_initialize(gd->bd);
+	#endif
 	if (mmc_exist != 0)
 	{
 		puts ("0 MB\n");

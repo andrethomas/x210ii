@@ -298,8 +298,11 @@ int get_mmc_block_count(char *device_name)
 	int dev_num;
 
 	dev_num = simple_strtoul(device_name, NULL, 0);
-	
+	#if defined(FORCE_MMC1)
+	mmc = find_mmc_device(1);
+	#else
 	mmc = find_mmc_device(dev_num);
+	#endif
 	if (!mmc)
 	{
 		printf("mmc/sd device is NOT founded.\n");
@@ -326,8 +329,11 @@ int get_mmc_mbr(char *device_name, unsigned char *mbr)
 	int dev_num;
 
 	dev_num = simple_strtoul(device_name, NULL, 0);
-	
+	#if defined(FORCE_MMC1)
+	mmc = find_mmc_device(1);
+	#else
 	mmc = find_mmc_device(dev_num);
+	#endif
 	if (!mmc)
 	{
 		printf("mmc/sd device is NOT founded.\n");
@@ -357,8 +363,11 @@ int put_mmc_mbr(unsigned char *mbr, char *device_name)
 	int dev_num;
 
 	dev_num = simple_strtoul(device_name, NULL, 0);
-	
+	#if defined(FORCE_MMC1)
+	mmc = find_mmc_device(1);
+	#else
 	mmc = find_mmc_device(dev_num);
+	#endif
 	if (!mmc)
 	{
 		printf("mmc/sd device is NOT founded.\n");
