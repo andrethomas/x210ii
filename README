@@ -3,4 +3,12 @@ Source code repository for x210ii/S5PV210
 Directory contents:
 
 	uboot		- Contains source code for u-boot
+			Changes:
+				- Added support in config file (include/configs/x210_sd.h) as FORCE_MMC1 which
+				  forces u-boot to use the SD card in slot MMC1 which on the development board
+				  is an external SD card.
+				  This voids the necessesity to use on board inand or nand.
+				  Enabled by default - to disable comment out FORCE_MMC1 in:
+				  uboot/include/configs/x210_sd.h
+
 
